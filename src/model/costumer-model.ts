@@ -9,7 +9,7 @@ export interface CostumerResponse {
   updated_at: Date;
 }
 
-export function toCostumerResponse(
+export function toCostumersResponse(
   costumers: m_costumer[]
 ): CostumerResponse[] {
   return costumers.map((costumer) => ({
