@@ -5,7 +5,7 @@ export interface ItemResponse {
   id: number;
   kode: string;
   nama: string;
-  harga: string;
+  harga: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -15,7 +15,7 @@ export function toItemsResponse(items: m_barang[]): ItemResponse[] {
     id: item.id,
     kode: item.kode,
     nama: item.nama,
-    harga: NumberUtil.formatToRupiah(Number(item.harga)),
+    harga: item.harga,
     created_at: item.created_at,
     updated_at: item.updated_at,
   }));
