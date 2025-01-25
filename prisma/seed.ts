@@ -27,7 +27,7 @@ async function main() {
     ],
   });
 
-  const costumers = await prisma.m_costumer.createMany({
+  const customer = await prisma.m_customer.createMany({
     data: [
       {
         kode: `U${Math.floor(1000 + Math.random() * 9000)}`,
@@ -47,7 +47,7 @@ async function main() {
     ],
   });
 
-  console.log(costumers);
+  console.log(customer);
   console.log(items);
 }
 main()
