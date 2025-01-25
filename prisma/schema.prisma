@@ -12,3 +12,37 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model m_barang {
+  id         Int      @id @default(autoincrement())
+  kode       String   @unique @db.VarChar()
+  nama       String   @db.VarChar()
+  harga      Int      @db.Integer
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @updatedAt @db.Timestamp()
+}
+
+model m_customer {
+  id         Int      @id @default(autoincrement())
+  kode       String   @unique @db.VarChar()
+  nama       String   @db.VarChar()
+  telp       String   @db.VarChar()
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @updatedAt @db.Timestamp()
+  t_sales    t_sales?
+}
+
+model t_sales {
+  id          Int      @id @default(autoincrement())
+  kode        String   @unique @db.VarChar()
+  tgl         DateTime @db.Timestamp()
+  customer_id Int      @unique @db.Integer
+  subtotal    Int      @db.Integer
+  diskon      Int      @db.Integer
+  ongkir      Int      @db.Integer
+  total_bayar Int      @db.Integer
+  created_at  DateTime @default(now()) @db.Timestamp()
+  updated_at  DateTime @updatedAt @db.Timestamp()
+
+  costumer m_customer @relation(fields: [customer_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
