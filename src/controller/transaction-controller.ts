@@ -17,4 +17,19 @@ export class TransactionController {
       next(error);
     }
   }
+  static async storeTransaction(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const result = await TransactionService.storeTransaction(req.body);
+      return res.status(200).json({
+        message: "success store transaction",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

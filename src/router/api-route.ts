@@ -1,16 +1,17 @@
 import express from "express";
-import { CostumerController } from "../controller/costumer-controller";
+import { CustomerController } from "../controller/customer-controller";
 import { ItemController } from "../controller/item-controller";
 import { TransactionController } from "../controller/transaction-controller";
 
 const apiRouter = express.Router();
 
+apiRouter.post("/api/transaction", TransactionController.storeTransaction);
 apiRouter.get(
   "/api/transaction/code",
   TransactionController.getCodeTransaction
 );
 
-apiRouter.get("/api/costumer", CostumerController.getAllCostumer);
+apiRouter.get("/api/customer", CustomerController.getAllCostumer);
 
 apiRouter.get("/api/item", ItemController.getAllItem);
 

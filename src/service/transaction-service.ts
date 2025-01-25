@@ -19,4 +19,8 @@ export class TransactionService {
 
     return transactionCode;
   }
+
+  static async storeTransaction(request: any) {
+    return request;
+  }
 }

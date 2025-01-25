@@ -4,9 +4,9 @@ import {
   type CostumerResponse,
 } from "../model/costumer-model";
 
-export class CostumerService {
+export class CustomerService {
   static async getAllCostumer(): Promise<CostumerResponse[]> {
-    const result = await prisma.m_costumer.findMany({});
+    const result = await prisma.m_customer.findMany({});
 
     return toCostumersResponse(result);
   }
