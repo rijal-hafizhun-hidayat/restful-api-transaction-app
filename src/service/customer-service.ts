@@ -3,6 +3,7 @@ import {
   toCostumersResponse,
   type CostumerResponse,
 } from "../model/costumer-model";
+import { CodeUtil } from "../utils/code-util";
 
 export class CustomerService {
   static async getAllCostumer(): Promise<CostumerResponse[]> {
@@ -19,5 +20,23 @@ export class CustomerService {
     });
 
     return result;
+  }
+
+  static async generateCustomerCode(): Promise<string> {
+    let customerCode: string;
+    let isUnique: boolean = false;
+
+    do {
+      customerCode = CodeUtil.generateCustomerCode();
+      const isCustomerCodeExist = await prisma.m_customer.findUnique({
+        where: {
+          kode: customerCode,
+        },
+      });
+
+      isUnique = !isCustomerCodeExist;
+    } while (!isUnique);
+
+    return customerCode;
   }
 }
