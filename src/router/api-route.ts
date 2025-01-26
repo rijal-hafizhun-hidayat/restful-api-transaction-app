@@ -13,6 +13,7 @@ apiRouter.get(
 );
 
 apiRouter.get("/api/customer", CustomerController.getAllCostumer);
+apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
 
 apiRouter.get("/api/item", ItemController.getAllItem);
 

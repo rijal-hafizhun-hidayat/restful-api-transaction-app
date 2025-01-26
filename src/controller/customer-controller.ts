@@ -33,4 +33,20 @@ export class CustomerController {
       next(error);
     }
   }
+
+  static async generateCustomerCode(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const result = await CustomerService.generateCustomerCode();
+      return res.status(200).json({
+        message: "success get customer code",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
