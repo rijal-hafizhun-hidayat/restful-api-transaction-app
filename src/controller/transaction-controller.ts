@@ -3,6 +3,22 @@ import { TransactionService } from "../service/transaction-service";
 import type { TransactionRequest } from "../model/transaction-model";
 
 export class TransactionController {
+  static async getAllTransaction(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const result = await TransactionService.getAllTransaction();
+      return res.status(200).json({
+        message: "success get transaction",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getCodeTransaction(
     req: Request,
     res: Response,
@@ -18,6 +34,7 @@ export class TransactionController {
       next(error);
     }
   }
+
   static async storeTransaction(
     req: Request,
     res: Response,
