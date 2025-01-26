@@ -9,7 +9,8 @@ export class TransactionController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await TransactionService.getAllTransaction();
+      const search: string | undefined = req.query.search as string;
+      const result = await TransactionService.getAllTransaction(search);
       return res.status(200).json({
         message: "success get transaction",
         data: result,
