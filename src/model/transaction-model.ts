@@ -1,6 +1,8 @@
 import type { t_sales } from "@prisma/client";
+import type { Item } from "./item-model";
 
 export interface TransactionRequest {
+  items: Item[];
   no_transaction: string;
   date: Date;
   customer_code: string;
@@ -19,7 +21,6 @@ export interface TransactionRequest {
 }
 
 export interface TransactionResponse {
-  id: number;
   kode: string;
   tgl: Date;
   customer_id: number;
@@ -35,14 +36,13 @@ export function toTransactionResponse(
   transaction: t_sales
 ): TransactionResponse {
   return {
-    id: transaction.id,
     kode: transaction.kode,
     tgl: transaction.tgl,
     customer_id: transaction.customer_id,
-    subtotal: transaction.subtotal,
-    diskon: transaction.diskon,
-    ongkir: transaction.ongkir,
-    total_bayar: transaction.total_bayar,
+    subtotal: transaction.subtotal.toNumber(),
+    diskon: transaction.diskon.toNumber(),
+    ongkir: transaction.ongkir.toNumber(),
+    total_bayar: transaction.total_bayar.toNumber(),
     created_at: transaction.created_at,
     updated_at: transaction.updated_at,
   };
