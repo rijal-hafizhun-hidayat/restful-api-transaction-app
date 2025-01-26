@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { TransactionService } from "../service/transaction-service";
+import type { TransactionRequest } from "../model/transaction-model";
 
 export class TransactionController {
   static async getCodeTransaction(
@@ -23,7 +24,8 @@ export class TransactionController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await TransactionService.storeTransaction(req.body);
+      const request: TransactionRequest = req.body as TransactionRequest;
+      const result = await TransactionService.storeTransaction(request);
       return res.status(200).json({
         message: "success store transaction",
         data: result,
