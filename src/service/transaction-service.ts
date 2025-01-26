@@ -1,5 +1,7 @@
 import { prisma } from "../app/database";
 import { ErrorResponse } from "../error/error-response";
+import type { Item } from "../model/item-model";
+import type { TransactionDetailRequest } from "../model/transaction-detail-model";
 import {
   toTransactionResponse,
   type TransactionRequest,
@@ -66,6 +68,15 @@ export class TransactionService {
       throw new ErrorResponse(404, "customer not found");
     }
 
+    const parseTransactionDetailRequest = this.parseRequestSalesDet(
+      requestBody.items,
+      requestBody.qty,
+      requestBody.discount_pct,
+      requestBody.discount_nominal,
+      requestBody.discount_price,
+      requestBody.total
+    );
+
     const [storeSale] = await prisma.$transaction([
       prisma.t_sales.create({
         data: {
@@ -76,10 +87,53 @@ export class TransactionService {
           diskon: requestBody.discount,
           ongkir: requestBody.shipping_cost,
           total_bayar: requestBody.total_price,
+          t_sales_det: {
+            create: parseTransactionDetailRequest,
+          },
         },
       }),
     ]);
 
     return toTransactionResponse(storeSale);
+  }
+
+  static parseRequestSalesDet(
+    items: Item[],
+    qty: number[],
+    discount_pct: number[],
+    discount_nominal: number[],
+    discount_price: number[],
+    total: number[]
+  ): TransactionDetailRequest[] {
+    let parsedRequestSalesDet = [];
+
+    if (
+      items.length !== qty.length ||
+      items.length !== discount_pct.length ||
+      items.length !== discount_nominal.length ||
+      items.length !== discount_price.length ||
+      items.length !== total.length
+    ) {
+      throw new ErrorResponse(
+        400,
+        "Jumlah item dan detail lainnya tidak cocok."
+      );
+    }
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      parsedRequestSalesDet.push({
+        m_barang_id: item.id,
+        harga_bandrol: item.harga,
+        qty: qty[i],
+        diskon_pct: discount_pct[i],
+        diskon_nilai: discount_nominal[i],
+        harga_diskon: discount_price[i],
+        total: total[i],
+      });
+    }
+
+    return parsedRequestSalesDet;
   }
 }

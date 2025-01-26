@@ -1,4 +1,4 @@
-import type { m_costumer } from "@prisma/client";
+import type { m_customer } from "@prisma/client";
 
 export interface CostumerResponse {
   id: number;
@@ -10,7 +10,7 @@ export interface CostumerResponse {
 }
 
 export function toCostumersResponse(
-  costumers: m_costumer[]
+  costumers: m_customer[]
 ): CostumerResponse[] {
   return costumers.map((costumer) => ({
     id: costumer.id,

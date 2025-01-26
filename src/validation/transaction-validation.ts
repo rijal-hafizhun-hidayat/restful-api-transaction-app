@@ -1,7 +1,11 @@
 import { array, boolean, number, string, z, type ZodType } from "zod";
+import { ItemValidation } from "./item-validation";
 
 export class TransactionValidation {
   static readonly storeTransactionSchema: ZodType = z.object({
+    items: array(ItemValidation.itemSchema).nonempty({
+      message: "barang wajib diisi",
+    }),
     no_transaction: string()
       .min(1, {
         message: "no transaksi wajib diisi",

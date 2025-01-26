@@ -1,7 +1,15 @@
 import type { m_barang } from "@prisma/client";
-import { NumberUtil } from "../utils/number-util";
 
 export interface ItemResponse {
+  id: number;
+  kode: string;
+  nama: string;
+  harga: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Item {
   id: number;
   kode: string;
   nama: string;
