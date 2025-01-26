@@ -14,8 +14,22 @@ import { TransactionValidation } from "../validation/transaction-validation";
 import { Validation } from "../validation/validation";
 
 export class TransactionService {
-  static async getAllTransaction(): Promise<TransactionWithCustomerResponse[]> {
+  static async getAllTransaction(
+    search?: string
+  ): Promise<TransactionWithCustomerResponse[]> {
+    const filterConditions: any = {};
+
+    if (search) {
+      filterConditions.OR = [
+        { kode: { contains: search, mode: "insensitive" } },
+        {
+          customer: { is: { nama: { contains: search, mode: "insensitive" } } },
+        },
+      ];
+    }
+
     const result = await prisma.t_sales.findMany({
+      where: filterConditions,
       include: {
         customer: true,
         sales_det: true,
