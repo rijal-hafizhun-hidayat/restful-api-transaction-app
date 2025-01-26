@@ -17,4 +17,20 @@ export class CustomerController {
       next(error);
     }
   }
+
+  static async getAllCostumerWithTransaction(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const result = await CustomerService.getAllCostumerWithTransaction();
+      return res.status(200).json({
+        message: "success get customer with transaction",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -10,4 +10,14 @@ export class CustomerService {
 
     return toCostumersResponse(result);
   }
+
+  static async getAllCostumerWithTransaction() {
+    const result = await prisma.m_customer.findMany({
+      include: {
+        t_sales: true,
+      },
+    });
+
+    return result;
+  }
 }
