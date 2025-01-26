@@ -5,6 +5,7 @@ import { TransactionController } from "../controller/transaction-controller";
 
 const apiRouter = express.Router();
 
+apiRouter.get("/api/transaction", TransactionController.getAllTransaction);
 apiRouter.post("/api/transaction", TransactionController.storeTransaction);
 apiRouter.get(
   "/api/transaction/code",
