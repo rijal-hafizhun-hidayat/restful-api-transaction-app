@@ -52,4 +52,25 @@ export class TransactionController {
       next(error);
     }
   }
+
+  static async destroyTransactionByTransactionId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const transactionId: number = parseInt(
+        req.params.transactionId as string
+      );
+      const result = await TransactionService.destroyTransactionByTransactionId(
+        transactionId
+      );
+      return res.status(200).json({
+        message: "success delete transaction",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -179,4 +179,28 @@ export class TransactionService {
 
     return parsedRequestSalesDet;
   }
+
+  static async destroyTransactionByTransactionId(
+    transactionId: number
+  ): Promise<TransactionResponse> {
+    const isTransactionExist = await prisma.t_sales.findUnique({
+      where: {
+        id: transactionId,
+      },
+    });
+
+    if (!isTransactionExist) {
+      throw new ErrorResponse(404, "transaction not found");
+    }
+
+    const [destroyTransaction] = await prisma.$transaction([
+      prisma.t_sales.delete({
+        where: {
+          id: transactionId,
+        },
+      }),
+    ]);
+
+    return toTransactionResponse(destroyTransaction);
+  }
 }
