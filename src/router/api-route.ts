@@ -4,6 +4,7 @@ import { ItemController } from "../controller/item-controller";
 import { TransactionController } from "../controller/transaction-controller";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { AuthController } from "../controller/auth-controller";
+import { RoleController } from "../controller/role-controller";
 
 const apiRouter = express.Router();
 
@@ -34,5 +35,7 @@ apiRouter.get("/api/customer", CustomerController.getAllCostumer);
 apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
 
 apiRouter.get("/api/item", ItemController.getAllItem);
+
+apiRouter.get("/api/role", RoleController.getAllRoles);
 
 export { apiRouter };
