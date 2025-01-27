@@ -19,6 +19,10 @@ apiRouter.get(
   "/api/transaction/:transactionId",
   TransactionController.getTransactionByTransactionId
 );
+apiRouter.put(
+  "/api/transaction/:transactionId",
+  TransactionController.updateTransactionByTransactionId
+);
 
 apiRouter.get("/api/customer", CustomerController.getAllCostumer);
 apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
