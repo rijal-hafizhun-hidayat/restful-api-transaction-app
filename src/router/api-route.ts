@@ -15,6 +15,10 @@ apiRouter.delete(
   "/api/transaction/:transactionId",
   TransactionController.destroyTransactionByTransactionId
 );
+apiRouter.get(
+  "/api/transaction/:transactionId",
+  TransactionController.getTransactionByTransactionId
+);
 
 apiRouter.get("/api/customer", CustomerController.getAllCostumer);
 apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
