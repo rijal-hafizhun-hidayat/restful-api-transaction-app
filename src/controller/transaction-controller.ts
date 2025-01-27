@@ -94,4 +94,27 @@ export class TransactionController {
       next(error);
     }
   }
+
+  static async updateTransactionByTransactionId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const request: TransactionRequest = req.body as TransactionRequest;
+      const transactionId: number = parseInt(
+        req.params.transactionId as string
+      );
+      const result = await TransactionService.updateTransactionByTransactionId(
+        request,
+        transactionId
+      );
+      return res.status(200).json({
+        message: "success update transaction",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

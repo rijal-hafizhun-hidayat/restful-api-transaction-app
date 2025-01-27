@@ -193,6 +193,7 @@ export function toTransactionWithSalesDetAndItemAndCustomerResponse(
       harga_diskon: sale.harga_diskon,
       total: sale.total,
       item: {
+        id: sale.item.id,
         kode: sale.item.kode,
         nama: sale.item.nama,
         harga: sale.item.harga,

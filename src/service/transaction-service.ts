@@ -75,7 +75,7 @@ export class TransactionService {
     request: TransactionRequest
   ): Promise<TransactionResponse> {
     const requestBody: TransactionRequest = Validation.validate(
-      TransactionValidation.storeTransactionSchema,
+      TransactionValidation.transactionSchema,
       request
     );
 
@@ -224,5 +224,92 @@ export class TransactionService {
     }
 
     return toTransactionWithSalesDetAndItemAndCustomerResponse(result);
+  }
+
+  static async updateTransactionByTransactionId(
+    request: TransactionRequest,
+    transactionId: number
+  ): Promise<TransactionResponse> {
+    const requestBody: TransactionRequest = Validation.validate(
+      TransactionValidation.transactionSchema,
+      request
+    );
+
+    const isTransactionExist = await prisma.t_sales.findUnique({
+      where: {
+        id: transactionId,
+      },
+    });
+
+    if (!isTransactionExist) {
+      throw new ErrorResponse(404, "transaction not found");
+    }
+
+    if (requestBody.is_new_costumer) {
+      const isCustomerCodeExist = await prisma.m_customer.findUnique({
+        where: {
+          kode: requestBody.customer_code,
+        },
+      });
+
+      if (isCustomerCodeExist) {
+        throw new ErrorResponse(404, "kode customer sudah ada");
+      }
+
+      await prisma.m_customer.create({
+        data: {
+          kode: requestBody.customer_code,
+          nama: requestBody.name,
+          telp: requestBody.phone_number,
+        },
+      });
+    }
+
+    const customer = await prisma.m_customer.findUnique({
+      where: {
+        kode: requestBody.customer_code,
+      },
+    });
+
+    if (!customer) {
+      throw new ErrorResponse(404, "customer not found");
+    }
+
+    const parseTransactionDetailRequest = this.parseRequestSalesDet(
+      requestBody.items,
+      requestBody.qty,
+      requestBody.discount_pct,
+      requestBody.discount_nominal,
+      requestBody.discount_price,
+      requestBody.total
+    );
+
+    const [, updateTransaction] = await prisma.$transaction([
+      prisma.t_sales_det.deleteMany({
+        where: {
+          t_sales_id: transactionId,
+        },
+      }),
+
+      prisma.t_sales.update({
+        where: {
+          id: transactionId,
+        },
+        data: {
+          kode: requestBody.no_transaction,
+          tgl: requestBody.date,
+          customer_id: customer.id,
+          subtotal: requestBody.subtotal,
+          diskon: requestBody.discount,
+          ongkir: requestBody.shipping_cost,
+          total_bayar: requestBody.total_price,
+          sales_det: {
+            create: parseTransactionDetailRequest,
+          },
+        },
+      }),
+    ]);
+
+    return toTransactionResponse(updateTransaction);
   }
 }
