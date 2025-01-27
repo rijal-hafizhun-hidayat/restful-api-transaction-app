@@ -2,8 +2,14 @@ import express from "express";
 import { CustomerController } from "../controller/customer-controller";
 import { ItemController } from "../controller/item-controller";
 import { TransactionController } from "../controller/transaction-controller";
+import { authMiddleware } from "../middleware/auth-middleware";
+import { AuthController } from "../controller/auth-controller";
 
 const apiRouter = express.Router();
+
+apiRouter.use(authMiddleware);
+apiRouter.post("/api/logout", AuthController.logout);
+apiRouter.get("/api/current-user", AuthController.currentUser);
 
 apiRouter.get("/api/transaction", TransactionController.getAllTransaction);
 apiRouter.post("/api/transaction", TransactionController.storeTransaction);
