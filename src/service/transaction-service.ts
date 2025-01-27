@@ -53,6 +53,29 @@ export class TransactionService {
     return toTransactionsWithCostumerResponse(formattedResult);
   }
 
+  static async getSumTotal(search?: string): Promise<number> {
+    const filterConditions: any = {};
+    if (search) {
+      filterConditions.OR = [
+        { kode: { contains: search, mode: "insensitive" } },
+        {
+          customer: {
+            is: { nama: { contains: search, mode: "insensitive" } },
+          },
+        },
+      ];
+    }
+
+    const sumTotal = await prisma.t_sales.aggregate({
+      where: filterConditions,
+      _sum: {
+        total_bayar: true,
+      },
+    });
+
+    return sumTotal._sum.total_bayar || 0;
+  }
+
   static async getCodeTransaction(): Promise<string> {
     let transactionCode: string;
     let isUnique: boolean = false;
