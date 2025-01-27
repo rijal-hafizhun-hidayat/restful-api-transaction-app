@@ -5,6 +5,7 @@ import { TransactionController } from "../controller/transaction-controller";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { AuthController } from "../controller/auth-controller";
 import { RoleController } from "../controller/role-controller";
+import { UserController } from "../controller/user-controller";
 
 const apiRouter = express.Router();
 
@@ -37,5 +38,11 @@ apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
 apiRouter.get("/api/item", ItemController.getAllItem);
 
 apiRouter.get("/api/role", RoleController.getAllRoles);
+
+apiRouter.get("/api/user", UserController.getAllUsers);
+apiRouter.post("/api/user", UserController.storeUser);
+apiRouter.delete("/api/user/:userId", UserController.destroyUserByUserId);
+apiRouter.get("/api/user/:userId", UserController.getUserByUserId);
+apiRouter.put("/api/user/:userId", UserController.updateUserByUserId);
 
 export { apiRouter };
