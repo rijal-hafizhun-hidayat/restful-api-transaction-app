@@ -5,9 +5,11 @@ import type { TransactionDetailRequest } from "../model/transaction-detail-model
 import {
   toTransactionResponse,
   toTransactionsWithCostumerResponse,
+  toTransactionWithSalesDetAndItemAndCustomerResponse,
   type TransactionRequest,
   type TransactionResponse,
   type TransactionWithCustomerResponse,
+  type TransactionWithSalesDetAndItemAndCustomerResponse,
 } from "../model/transaction-model";
 import { CodeUtil } from "../utils/code-util";
 import { TransactionValidation } from "../validation/transaction-validation";
@@ -44,10 +46,6 @@ export class TransactionService {
 
       return {
         ...transaction,
-        subtotal: Number(transaction.subtotal),
-        diskon: Number(transaction.diskon),
-        ongkir: Number(transaction.ongkir),
-        total_bayar: Number(transaction.total_bayar),
         total_qty: totalQty,
       };
     });
@@ -202,5 +200,29 @@ export class TransactionService {
     ]);
 
     return toTransactionResponse(destroyTransaction);
+  }
+
+  static async getTransactionByTransactionId(
+    transactionId: number
+  ): Promise<TransactionWithSalesDetAndItemAndCustomerResponse> {
+    const result = await prisma.t_sales.findUnique({
+      where: {
+        id: transactionId,
+      },
+      include: {
+        sales_det: {
+          include: {
+            item: true,
+          },
+        },
+        customer: true,
+      },
+    });
+
+    if (!result) {
+      throw new ErrorResponse(404, "transaction not found");
+    }
+
+    return toTransactionWithSalesDetAndItemAndCustomerResponse(result);
   }
 }

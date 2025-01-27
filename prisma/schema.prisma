@@ -38,10 +38,10 @@ model t_sales {
   kode        String   @unique @db.VarChar()
   tgl         DateTime @db.Timestamp()
   customer_id Int      @db.Integer
-  subtotal    Decimal  @db.Decimal()
-  diskon      Decimal  @db.Decimal()
-  ongkir      Decimal  @db.Decimal()
-  total_bayar Decimal  @db.Decimal()
+  subtotal    Int      @db.Integer
+  diskon      Int      @db.Integer
+  ongkir      Int      @db.Integer
+  total_bayar Int      @db.Integer
   created_at  DateTime @default(now()) @db.Timestamp()
   updated_at  DateTime @updatedAt @db.Timestamp()
 
@@ -50,16 +50,16 @@ model t_sales {
 }
 
 model t_sales_det {
-  id            Int     @id @default(autoincrement())
-  t_sales_id    Int     @db.Integer
-  m_barang_id   Int     @db.Integer
-  harga_bandrol Decimal @db.Decimal()
-  qty           Int     @db.Integer
-  diskon_pct    Decimal @db.Decimal()
-  diskon_nilai  Decimal @db.Decimal()
-  harga_diskon  Decimal @db.Decimal()
-  total         Decimal @db.Decimal()
+  id            Int @id @default(autoincrement())
+  t_sales_id    Int @db.Integer
+  m_barang_id   Int @db.Integer
+  harga_bandrol Int @db.Integer
+  qty           Int @db.Integer
+  diskon_pct    Int @db.Integer
+  diskon_nilai  Int @db.Integer
+  harga_diskon  Int @db.Integer
+  total         Int @db.Integer
 
   sales t_sales  @relation(fields: [t_sales_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  items m_barang @relation(fields: [m_barang_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  item  m_barang @relation(fields: [m_barang_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
