@@ -13,6 +13,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model user {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar()
+  email      String     @unique @db.VarChar()
+  password   String     @db.VarChar()
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  user_role  user_role?
+}
+
+model role {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar()
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  user_role  user_role[]
+}
+
+model user_role {
+  id         Int      @id @default(autoincrement())
+  user_id    Int      @unique @db.Integer
+  role_id    Int      @db.Integer
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user user @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  role role @relation(fields: [role_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
 model m_barang {
   id          Int           @id @default(autoincrement())
   kode        String        @unique @db.VarChar()
