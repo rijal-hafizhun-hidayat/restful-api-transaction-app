@@ -11,9 +11,11 @@ export class TransactionController {
     try {
       const search: string | undefined = req.query.search as string;
       const result = await TransactionService.getAllTransaction(search);
+      const sumTotal = await TransactionService.getSumTotal(search);
       return res.status(200).json({
         message: "success get transaction",
         data: result,
+        sum_total: sumTotal,
       });
     } catch (error) {
       next(error);
