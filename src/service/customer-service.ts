@@ -11,8 +11,35 @@ import { CustomerValidation } from "../validation/customer-validation";
 import { Validation } from "../validation/validation";
 
 export class CustomerService {
-  static async getAllCostumer(): Promise<CustomerResponse[]> {
-    const result = await prisma.m_customer.findMany({});
+  static async getAllCostumer(search?: string): Promise<CustomerResponse[]> {
+    const filterConditions: any = {};
+
+    if (search) {
+      filterConditions.OR = [
+        {
+          kode: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          nama: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          telp: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ];
+    }
+
+    const result = await prisma.m_customer.findMany({
+      where: filterConditions,
+    });
 
     return toCostumersResponse(result);
   }
