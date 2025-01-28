@@ -10,8 +10,23 @@ import { RoleValidation } from "../validation/role-validation";
 import { Validation } from "../validation/validation";
 
 export class RoleService {
-  static async getAllRoles(): Promise<RoleResponse[]> {
-    const roles = await prisma.role.findMany();
+  static async getAllRoles(search?: string): Promise<RoleResponse[]> {
+    const filterConditions: any = {};
+
+    if (search) {
+      filterConditions.OR = [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ];
+    }
+
+    const roles = await prisma.role.findMany({
+      where: filterConditions,
+    });
 
     return toRolesResponse(roles);
   }
