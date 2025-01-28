@@ -9,7 +9,8 @@ export class RoleController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await RoleService.getAllRoles();
+      const search: string | undefined = req.query.search as string;
+      const result = await RoleService.getAllRoles(search);
       return res.status(200).json({
         message: "success get role",
         data: result,
