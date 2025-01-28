@@ -49,6 +49,11 @@ apiRouter.put(
 );
 
 apiRouter.get("/api/item", ItemController.getAllItem);
+apiRouter.post("/api/item", ItemController.storeItem);
+apiRouter.get("/api/item/code", ItemController.generateItemCode);
+apiRouter.delete("/api/item/:itemId", ItemController.destroyItemByItemId);
+apiRouter.get("/api/item/:itemId", ItemController.getItemByItemId);
+apiRouter.put("/api/item/:itemId", ItemController.updateItemByItemId);
 
 apiRouter.get("/api/role", RoleController.getAllRoles);
 apiRouter.post("/api/role", RoleController.storeRole);
