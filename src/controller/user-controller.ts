@@ -9,7 +9,8 @@ export class UserController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await UserService.getAllUsersWithRole();
+      const search: string | undefined = req.query.search as string;
+      const result = await UserService.getAllUsersWithRole(search);
       return res.status(200).json({
         message: "success get user",
         data: result,
