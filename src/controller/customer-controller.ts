@@ -9,7 +9,8 @@ export class CustomerController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await CustomerService.getAllCostumer();
+      const search: string | undefined = req.query.search as string;
+      const result = await CustomerService.getAllCostumer(search);
       return res.status(200).json({
         message: "success get customer",
         data: result,
