@@ -33,7 +33,20 @@ apiRouter.put(
 );
 
 apiRouter.get("/api/customer", CustomerController.getAllCostumer);
+apiRouter.post("/api/customer", CustomerController.storeCustomer);
 apiRouter.get("/api/customer/code", CustomerController.generateCustomerCode);
+apiRouter.delete(
+  "/api/customer/:customerId",
+  CustomerController.destroyCustomerByCostumerId
+);
+apiRouter.get(
+  "/api/customer/:customerId",
+  CustomerController.getCustomerByCostumerId
+);
+apiRouter.put(
+  "/api/customer/:customerId",
+  CustomerController.updateCustomerByCostumerId
+);
 
 apiRouter.get("/api/item", ItemController.getAllItem);
 
