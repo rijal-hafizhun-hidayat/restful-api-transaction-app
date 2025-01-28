@@ -11,8 +11,29 @@ import { ItemValidation } from "../validation/item-validation";
 import { Validation } from "../validation/validation";
 
 export class ItemService {
-  static async getAllItem(): Promise<ItemResponse[]> {
-    const result = await prisma.m_barang.findMany({});
+  static async getAllItem(search?: string): Promise<ItemResponse[]> {
+    const filterConditions: any = {};
+
+    if (search) {
+      filterConditions.OR = [
+        {
+          kode: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          nama: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ];
+    }
+
+    const result = await prisma.m_barang.findMany({
+      where: filterConditions,
+    });
 
     return toItemsResponse(result);
   }

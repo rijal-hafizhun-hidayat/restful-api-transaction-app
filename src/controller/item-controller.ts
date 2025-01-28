@@ -9,7 +9,8 @@ export class ItemController {
     next: NextFunction
   ): Promise<any> {
     try {
-      const result = await ItemService.getAllItem();
+      const search: string | undefined = req.query.search as string;
+      const result = await ItemService.getAllItem(search);
       return res.status(200).json({
         message: "success get item",
         data: result,
