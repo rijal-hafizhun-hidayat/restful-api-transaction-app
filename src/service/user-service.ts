@@ -53,8 +53,30 @@ export class UserService {
     return toUserWithRoleResponse(storeUser);
   }
 
-  static async getAllUsersWithRole(): Promise<UserWithRoleResponse[]> {
+  static async getAllUsersWithRole(
+    search?: string
+  ): Promise<UserWithRoleResponse[]> {
+    const filterConditions: any = {};
+
+    if (search) {
+      filterConditions.OR = [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ];
+    }
+
     const result = await prisma.user.findMany({
+      where: filterConditions,
       include: {
         user_role: {
           include: {
