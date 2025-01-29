@@ -47,8 +47,44 @@ async function main() {
     ],
   });
 
+  const user = await prisma.user.create({
+    data: {
+      name: "rijal hafizhun hidayat",
+      email: "rijal.1344@gmail.com",
+      password:
+        "$argon2id$v=19$m=65536,t=2,p=1$gbeDqrnOu39J7WmVAe+jC4/6y6wHu81SOPELbwxaJ7M$Wznj+VARyCqJzz5HGNe9djenbP9DPN/4c1tK2412nSo",
+    },
+  });
+
+  const roles = await prisma.role.createMany({
+    data: [
+      {
+        name: "admin",
+      },
+      {
+        name: "teller",
+      },
+    ],
+  });
+
+  const roleAdmin = await prisma.role.findUnique({
+    where: {
+      name: "admin",
+    },
+  });
+
+  const user_role = await prisma.user_role.create({
+    data: {
+      user_id: user.id,
+      role_id: roleAdmin!.id,
+    },
+  });
+
   console.log(customer);
   console.log(items);
+  console.log(user);
+  console.log(roles);
+  console.log(user_role);
 }
 main()
   .then(async () => {

@@ -13,30 +13,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model m_barang {
+model user {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar()
+  email      String     @unique @db.VarChar()
+  password   String     @db.VarChar()
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  user_role  user_role?
+}
+
+model role {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar()
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  user_role  user_role[]
+}
+
+model user_role {
   id         Int      @id @default(autoincrement())
-  kode       String   @unique @db.VarChar()
-  nama       String   @db.VarChar()
-  harga      Int      @db.Integer
-  created_at DateTime @default(now()) @db.Timestamp()
-  updated_at DateTime @updatedAt @db.Timestamp()
+  user_id    Int      @unique @db.Integer
+  role_id    Int      @db.Integer
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user user @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  role role @relation(fields: [role_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model m_barang {
+  id          Int           @id @default(autoincrement())
+  kode        String        @unique @db.VarChar()
+  nama        String        @db.VarChar()
+  harga       Int           @db.Integer
+  created_at  DateTime      @default(now()) @db.Timestamp()
+  updated_at  DateTime      @updatedAt @db.Timestamp()
+  t_sales_det t_sales_det[]
 }
 
 model m_customer {
-  id         Int      @id @default(autoincrement())
-  kode       String   @unique @db.VarChar()
-  nama       String   @db.VarChar()
-  telp       String   @db.VarChar()
-  created_at DateTime @default(now()) @db.Timestamp()
-  updated_at DateTime @updatedAt @db.Timestamp()
-  t_sales    t_sales?
+  id         Int       @id @default(autoincrement())
+  kode       String    @unique @db.VarChar()
+  nama       String    @db.VarChar()
+  telp       String    @db.VarChar()
+  created_at DateTime  @default(now()) @db.Timestamp()
+  updated_at DateTime  @updatedAt @db.Timestamp()
+  t_sales    t_sales[]
 }
 
 model t_sales {
   id          Int      @id @default(autoincrement())
   kode        String   @unique @db.VarChar()
   tgl         DateTime @db.Timestamp()
-  customer_id Int      @unique @db.Integer
+  customer_id Int      @db.Integer
   subtotal    Int      @db.Integer
   diskon      Int      @db.Integer
   ongkir      Int      @db.Integer
@@ -44,5 +74,21 @@ model t_sales {
   created_at  DateTime @default(now()) @db.Timestamp()
   updated_at  DateTime @updatedAt @db.Timestamp()
 
-  costumer m_customer @relation(fields: [customer_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  customer  m_customer    @relation(fields: [customer_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  sales_det t_sales_det[]
+}
+
+model t_sales_det {
+  id            Int @id @default(autoincrement())
+  t_sales_id    Int @db.Integer
+  m_barang_id   Int @db.Integer
+  harga_bandrol Int @db.Integer
+  qty           Int @db.Integer
+  diskon_pct    Int @db.Integer
+  diskon_nilai  Int @db.Integer
+  harga_diskon  Int @db.Integer
+  total         Int @db.Integer
+
+  sales t_sales  @relation(fields: [t_sales_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  item  m_barang @relation(fields: [m_barang_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
