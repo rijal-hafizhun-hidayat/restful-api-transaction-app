@@ -9,15 +9,15 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model user {
   id         Int        @id @default(autoincrement())
-  name       String     @db.VarChar(255)
-  email      String     @unique @db.VarChar(255)
-  password   String     @db.VarChar(255)
+  name       String     @db.VarChar()
+  email      String     @unique @db.VarChar()
+  password   String     @db.VarChar()
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   user_role  user_role?
@@ -25,7 +25,7 @@ model user {
 
 model role {
   id         Int         @id @default(autoincrement())
-  name       String      @unique @db.VarChar(255)
+  name       String      @unique @db.VarChar()
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   user_role  user_role[]
@@ -33,8 +33,8 @@ model role {
 
 model user_role {
   id         Int      @id @default(autoincrement())
-  user_id    Int      @unique @db.Int
-  role_id    Int      @db.Int
+  user_id    Int      @unique @db.Integer
+  role_id    Int      @db.Integer
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -44,35 +44,35 @@ model user_role {
 
 model m_barang {
   id          Int           @id @default(autoincrement())
-  kode        String        @unique @db.VarChar(255)
-  nama        String        @db.VarChar(255)
-  harga       Int           @db.Int
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
+  kode        String        @unique @db.VarChar()
+  nama        String        @db.VarChar()
+  harga       Int           @db.Integer
+  created_at  DateTime      @default(now()) @db.Timestamp()
+  updated_at  DateTime      @updatedAt @db.Timestamp()
   t_sales_det t_sales_det[]
 }
 
 model m_customer {
   id         Int       @id @default(autoincrement())
-  kode       String    @unique @db.VarChar(255)
-  nama       String    @db.VarChar(255)
-  telp       String    @db.VarChar(255)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  kode       String    @unique @db.VarChar()
+  nama       String    @db.VarChar()
+  telp       String    @db.VarChar()
+  created_at DateTime  @default(now()) @db.Timestamp()
+  updated_at DateTime  @updatedAt @db.Timestamp()
   t_sales    t_sales[]
 }
 
 model t_sales {
   id          Int      @id @default(autoincrement())
-  kode        String   @unique @db.VarChar(255)
+  kode        String   @unique @db.VarChar()
   tgl         DateTime @db.Timestamp()
-  customer_id Int      @db.Int
-  subtotal    Int      @db.Int
-  diskon      Int      @db.Int
-  ongkir      Int      @db.Int
-  total_bayar Int      @db.Int
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  customer_id Int      @db.Integer
+  subtotal    Int      @db.Integer
+  diskon      Int      @db.Integer
+  ongkir      Int      @db.Integer
+  total_bayar Int      @db.Integer
+  created_at  DateTime @default(now()) @db.Timestamp()
+  updated_at  DateTime @updatedAt @db.Timestamp()
 
   customer  m_customer    @relation(fields: [customer_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   sales_det t_sales_det[]
@@ -80,14 +80,14 @@ model t_sales {
 
 model t_sales_det {
   id            Int @id @default(autoincrement())
-  t_sales_id    Int @db.Int
-  m_barang_id   Int @db.Int
-  harga_bandrol Int @db.Int
-  qty           Int @db.Int
-  diskon_pct    Int @db.Int
-  diskon_nilai  Int @db.Int
-  harga_diskon  Int @db.Int
-  total         Int @db.Int
+  t_sales_id    Int @db.Integer
+  m_barang_id   Int @db.Integer
+  harga_bandrol Int @db.Integer
+  qty           Int @db.Integer
+  diskon_pct    Int @db.Integer
+  diskon_nilai  Int @db.Integer
+  harga_diskon  Int @db.Integer
+  total         Int @db.Integer
 
   sales t_sales  @relation(fields: [t_sales_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   item  m_barang @relation(fields: [m_barang_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
