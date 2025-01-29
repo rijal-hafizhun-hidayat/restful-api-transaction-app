@@ -4,8 +4,6 @@ import { ItemController } from "../controller/item-controller";
 import { TransactionController } from "../controller/transaction-controller";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { AuthController } from "../controller/auth-controller";
-import { RoleController } from "../controller/role-controller";
-import { UserController } from "../controller/user-controller";
 
 const apiRouter = express.Router();
 
@@ -54,17 +52,5 @@ apiRouter.get("/api/item/code", ItemController.generateItemCode);
 apiRouter.delete("/api/item/:itemId", ItemController.destroyItemByItemId);
 apiRouter.get("/api/item/:itemId", ItemController.getItemByItemId);
 apiRouter.put("/api/item/:itemId", ItemController.updateItemByItemId);
-
-apiRouter.get("/api/role", RoleController.getAllRoles);
-apiRouter.post("/api/role", RoleController.storeRole);
-apiRouter.delete("/api/role/:roleId", RoleController.destroyRoleByRoleId);
-apiRouter.get("/api/role/:roleId", RoleController.getRoleByRoleId);
-apiRouter.put("/api/role/:roleId", RoleController.updateRoleByRoleId);
-
-apiRouter.get("/api/user", UserController.getAllUsers);
-apiRouter.post("/api/user", UserController.storeUser);
-apiRouter.delete("/api/user/:userId", UserController.destroyUserByUserId);
-apiRouter.get("/api/user/:userId", UserController.getUserByUserId);
-apiRouter.put("/api/user/:userId", UserController.updateUserByUserId);
 
 export { apiRouter };
