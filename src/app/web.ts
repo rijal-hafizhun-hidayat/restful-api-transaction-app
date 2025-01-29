@@ -3,6 +3,7 @@ import express from "express";
 import { errorMiddleware } from "../middleware/error-middleware";
 import { apiRouter } from "../router/api-route";
 import { publicRoute } from "../router/public-route";
+import { adminRoute } from "../router/admin-route";
 
 const web = express();
 
@@ -26,6 +27,7 @@ web.use(cors(corsOptions));
 web.use(express.json());
 web.use(publicRoute);
 web.use(apiRouter);
+web.use(adminRoute);
 web.use(errorMiddleware);
 
 export { web };
